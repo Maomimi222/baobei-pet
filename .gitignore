@@ -1,1 +1,4 @@
-# baobei-pet bootstrap
+.DS_Store
+Thumbs.db
+*.log
+node_modules/

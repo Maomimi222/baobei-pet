@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>宝贝宠物养成 · 学习生活工作台</title>
+  <meta name="description" content="6岁小朋友的学习生活工作台：语文乐园、英语花园、数字王国、数独挑战、宠物养成" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/style.css?v=20260909" />
+</head>
+<body>
+  <!-- 顶部移动端信息条 -->
+  <header class="topbar" id="topbar">
+    <div class="topbar-logo">🐱 宝贝宠物养成</div>
+    <div class="topbar-stats">
+      <span class="stat-star" id="topbarStars">⭐ 0</span>
+      <button class="icon-btn" id="soundToggle" title="开关声音">🔊</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <!-- PC 侧边栏导航 -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-emoji">🐱</div>
+        <div class="logo-text">
+          <strong>宝贝宠物</strong>
+          <small>养成工作台</small>
+        </div>
+      </div>
+      <nav class="nav" id="nav">
+        <button class="nav-item" data-view="home"><span class="nav-ico">🏠</span><span>我的小屋</span></button>
+        <button class="nav-item" data-view="chinese"><span class="nav-ico">📚</span><span>语文乐园</span></button>
+        <button class="nav-item" data-view="english"><span class="nav-ico">🌸</span><span>英语花园</span></button>
+        <button class="nav-item" data-view="math"><span class="nav-ico">🔢</span><span>数字王国</span></button>
+        <button class="nav-item" data-view="sudoku"><span class="nav-ico">🔲</span><span>数独挑战</span></button>
+        <button class="nav-item" data-view="selfcare"><span class="nav-ico">🧹</span><span>自理能手</span></button>
+        <button class="nav-item" data-view="pet"><span class="nav-ico">🐾</span><span>宠物养成</span></button>
+        <button class="nav-item" data-view="parent"><span class="nav-ico">👨‍👩‍👧</span><span>家长后台</span></button>
+      </nav>
+      <div class="sidebar-pet" id="sidebarPet">
+        <div class="sp-emoji" id="spEmoji">🥚</div>
+        <div class="sp-info">
+          <strong id="spName">小蛋</strong>
+          <small id="spStage">蛋宝宝</small>
+        </div>
+        <div class="sp-stars">⭐ <span id="spStars">0</span></div>
+      </div>
+    </aside>
+
+    <!-- 主内容区 -->
+    <main class="content" id="content">
+      <section class="view" id="view-home"></section>
+      <section class="view" id="view-chinese"></section>
+      <section class="view" id="view-english"></section>
+      <section class="view" id="view-math"></section>
+      <section class="view" id="view-sudoku"></section>
+      <section class="view" id="view-pet"></section>
+      <section class="view" id="view-selfcare"></section>
+      <section class="view" id="view-parent"></section>
+    </main>
+  </div>
+
+  <!-- 移动端底部 Tab -->
+  <nav class="tabbar" id="tabbar">
+    <button class="tab-item" data-view="home"><span class="tab-ico">🏠</span><span>小屋</span></button>
+    <button class="tab-item" data-view="chinese"><span class="tab-ico">📚</span><span>语文</span></button>
+    <button class="tab-item" data-view="english"><span class="tab-ico">🌸</span><span>英语</span></button>
+    <button class="tab-item" data-view="math"><span class="tab-ico">🔢</span><span>数学</span></button>
+    <button class="tab-item" data-view="sudoku"><span class="tab-ico">🔲</span><span>数独</span></button>
+    <button class="tab-item" data-view="selfcare"><span class="tab-ico">🧹</span><span>自理</span></button>
+    <button class="tab-item" data-view="pet"><span class="tab-ico">🐾</span><span>宠物</span></button>
+  </nav>
+
+  <!-- 撒花画布 -->
+  <canvas id="confetti"></canvas>
+  <!-- 弹窗 -->
+  <div class="toast-wrap" id="toastWrap"></div>
+  <div class="modal-mask" id="modalMask"></div>
+
+  <script src="assets/js/store.js?v=20260909"></script>
+  <script src="assets/js/data.js?v=20260909"></script>
+  <script src="assets/audio/manifest.js"></script>
+  <script src="assets/js/util.js?v=20260909"></script>
+  <script src="assets/js/chinese.js?v=20260909"></script>
+  <script src="assets/js/english.js?v=20260909"></script>
+  <script src="assets/js/math.js?v=20260909"></script>
+  <script src="assets/js/sudoku.js?v=20260909"></script>
+  <script src="assets/js/petart.js?v=20260909"></script>
+  <script src="assets/js/pet.js?v=20260909"></script>
+  <script src="assets/js/selfcare.js?v=20260909"></script>
+  <script src="assets/js/parent.js?v=20260909"></script>
+  <script src="assets/js/app.js?v=20260909"></script>
+</body>
+</html>
