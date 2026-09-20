@@ -279,17 +279,25 @@
   function openDress() {
     const pet = S.activePet();
     const wrap = U.el('div', { class: 'shop-grid' });
+    const limitedNow = PA.OUTFITS.some(o => o.series === '中秋限定' && S.outfitAvailable(o));
     PA.SLOTS.forEach(slot => {
       wrap.appendChild(U.el('div', { class: 'shop-slot' }, slot.name));
       PA.OUTFITS.filter(o => o.slot === slot.id).forEach(o => {
         const owned = pet.wardrobe.includes(o.id);
         const wearing = pet.wearing[slot.id] === o.id;
-        const item = U.el('div', { class: 'shop-item' + (owned ? ' owned' : '') + (wearing ? ' wearing' : '') }, [
+        const expired = !!o.limitedUntil && !S.outfitAvailable(o);
+        const cls = 'shop-item' + (owned ? ' owned' : '') + (wearing ? ' wearing' : '') + (expired ? ' expired' : '');
+        const item = U.el('div', { class: cls }, [
+          o.series ? U.el('div', { class: 'si-series' }, '🌕' + o.series) : null,
           U.el('div', { class: 'si-emoji' }, o.emoji),
           U.el('div', { class: 'si-name' }, o.name),
-          U.el('div', { class: 'si-tag' + (owned ? (wearing ? ' on' : ' lock') : ' lock') }, owned ? (wearing ? '穿戴中' : '点此穿戴') : ('⭐' + o.cost)),
-        ]);
+          U.el('div', { class: 'si-tag' + (owned ? (wearing ? ' on' : ' lock') : ' lock') },
+            owned ? (wearing ? '穿戴中' : '点此穿戴')
+                  : expired ? '⏰ 已下架'
+                  : ('⭐' + o.cost)),
+        ].filter(Boolean));
         item.onclick = () => {
+          if (expired && !owned) { U.toast(o.name + ' 是中秋限定，10月31日 23:59 后已下架', '⏰'); return; }
           let r;
           if (owned) { r = wearing ? S.unequipOutfit(slot.id) : S.equipOutfit(o.id); }
           else { r = S.buyOutfit(o.id); if (r.ok) U.confetti(800); }
@@ -303,7 +311,9 @@
       });
     });
     const avail = U.el('div', { class: 'shop-avail' }, '⭐ 可用星星：' + S.availableStars());
-    U.modal({ emoji: '🎀', title: '宠物换装店', body: [avail, wrap], actions: [{ label: '完成', cls: 'btn-pink', onClick: () => U.closeModal() }] });
+    const body = [avail, wrap];
+    if (limitedNow) body.unshift(U.el('div', { class: 'shop-banner' }, '🌕 中秋·国庆限定装扮，10月31日 23:59 前可在换装店兑换！'));
+    U.modal({ emoji: '🎀', title: '宠物换装店', body, actions: [{ label: '完成', cls: 'btn-pink', onClick: () => U.closeModal() }] });
   }
 
   /* ===================== 场景选择 ===================== */

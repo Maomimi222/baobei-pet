@@ -86,6 +86,12 @@
     { id: 'crown',   slot: 'head', name: '小王冠', emoji: '👑', cost: 60 },
     { id: 'basket',  slot: 'hand', name: '花篮',   emoji: '🧺', cost: 20 },
     { id: 'balloon', slot: 'hand', name: '小气球', emoji: '🎈', cost: 15 },
+    // ===== 中秋·国庆 限定装扮（2026，10月31日 23:59 前可在换装店兑换）=====
+    { id: 'mq_ears',     slot: 'head', name: '玉兔发箍', emoji: '🐰', cost: 15, series: '中秋限定', limitedUntil: '2026-10-31' },
+    { id: 'mq_glasses',  slot: 'face', name: '月牙眼镜', emoji: '🌙', cost: 12, series: '中秋限定', limitedUntil: '2026-10-31' },
+    { id: 'mq_necklace', slot: 'neck', name: '桂花项链', emoji: '🌼', cost: 12, series: '中秋限定', limitedUntil: '2026-10-31' },
+    { id: 'mq_vest',     slot: 'body', name: '月饼肚兜', emoji: '🥮', cost: 18, series: '中秋限定', limitedUntil: '2026-10-31' },
+    { id: 'mq_lantern',  slot: 'hand', name: '玉兔灯笼', emoji: '🏮', cost: 16, series: '中秋限定', limitedUntil: '2026-10-31' },
   ];
   const OUTFIT_MAP = {};
   OUTFITS.forEach(o => { OUTFIT_MAP[o.id] = o; });
@@ -576,6 +582,57 @@
           '<ellipse cx="152" cy="88" rx="4.5" ry="6.5" fill="rgba(255,255,255,.55)"/>' +
           '<path d="M 158,114 L 154,121 L 162,121 Z" fill="#FF7BAC"/>' +
           sparkle(150, 96, 4, 'rgba(255,255,255,.7)') +
+        '</g>';
+      /* ===== 中秋·国庆 限定装扮 ===== */
+      case 'mq_ears': {
+        const ear = '<path d="M 74,46 C 62,28 66,6 80,4 C 94,8 90,30 86,46 Z" fill="#FFF6EE" stroke="#E7C9A8" stroke-width="2.5"/>' +
+          '<path d="M 78,44 C 72,30 74,14 81,12 C 88,16 86,32 84,44 Z" fill="#FFB3D9"/>';
+        return '<g class="outfit-mq-ears">' +
+          '<path d="M 58,50 Q 100,30 142,50" fill="none" stroke="#FFD24D" stroke-width="5" stroke-linecap="round"/>' +
+          ear +
+          '<g transform="translate(200,0) scale(-1,1)">' + ear + '</g>' +
+          '<circle cx="100" cy="40" r="6" fill="#FFD24D" stroke="#E8A800" stroke-width="1.5"/>' +
+          '<path d="M 103,36 A 5,5 0 1 0 103,44 A 4,4 0 1 1 103,36 Z" fill="#FFF6EE"/>' +
+        '</g>';
+      }
+      case 'mq_glasses': {
+        const moon = (cx) => '<path d="M ' + cx + ',64 A 15,15 0 1 1 ' + (cx - 4) + ',93 A 11,11 0 1 0 ' + cx + ',64 Z" fill="#FFD24D" stroke="#E8A800" stroke-width="2"/>' + sparkle(cx - 5, 70, 3, 'rgba(255,255,255,.8)');
+        return '<g class="outfit-mq-glasses">' +
+          moon(84) + moon(116) +
+          '<path d="M 96,78 Q 100,74 104,78" fill="none" stroke="#E8A800" stroke-width="3"/>' +
+          '<path d="M 69,76 L 54,70" stroke="#E8A800" stroke-width="3" fill="none" stroke-linecap="round"/>' +
+          '<path d="M 131,76 L 146,70" stroke="#E8A800" stroke-width="3" fill="none" stroke-linecap="round"/>' +
+        '</g>';
+      }
+      case 'mq_necklace':
+        return '<g class="outfit-mq-necklace">' +
+          '<path d="M 70,100 Q 100,126 130,100" fill="none" stroke="#FFD24D" stroke-width="3" stroke-linecap="round"/>' +
+          '<g transform="translate(100,124)">' +
+            flower(0, 0, 1.0, '#FFCE3A', '#E89A2C') +
+            flower(-7, 4, 0.7, '#FFB347', '#E8852C') +
+            flower(7, 4, 0.7, '#FFB347', '#E8852C') +
+            '<path d="M 0,2 q -3,8 -6,11 M 0,2 q 3,8 6,11" stroke="#5FB36A" stroke-width="1.6" fill="none"/>' +
+          '</g>' +
+        '</g>';
+      case 'mq_vest':
+        return '<g class="outfit-mq-vest">' +
+          '<circle cx="100" cy="152" r="30" fill="#E8B96A" stroke="#C8924A" stroke-width="3"/>' +
+          '<circle cx="100" cy="152" r="30" fill="none" stroke="#C8924A" stroke-width="1" stroke-dasharray="3 4" opacity=".6"/>' +
+          flower(100, 152, 1.5, '#FBE3B0', '#C8924A') +
+          sparkle(82, 140, 2.5, '#C8924A') + sparkle(118, 140, 2.5, '#C8924A') +
+          sparkle(82, 164, 2.5, '#C8924A') + sparkle(118, 164, 2.5, '#C8924A') +
+        '</g>';
+      case 'mq_lantern':
+        return '<g class="outfit-mq-lantern">' +
+          '<path d="M 140,167 Q 150,135 156,110" fill="none" stroke="#B9A892" stroke-width="1.6"/>' +
+          '<rect x="148" y="96" width="20" height="6" rx="2" fill="#E8A800"/>' +
+          '<ellipse cx="158" cy="112" rx="15" ry="18" fill="#FF6B6B" stroke="#E84D4D" stroke-width="2"/>' +
+          '<path d="M 152,98 Q 150,112 152,126 M 158,96 L 158,130 M 164,98 Q 166,112 164,126" stroke="#E84D4D" stroke-width="1.2" fill="none" opacity=".6"/>' +
+          '<circle cx="153" cy="108" r="2" fill="#3B3550"/><circle cx="163" cy="108" r="2" fill="#3B3550"/>' +
+          '<path d="M 156,114 q 2,2 4,0" stroke="#E84D4D" stroke-width="1.4" fill="none"/>' +
+          '<path d="M 154,96 l -2,-7 4,0 z" fill="#FFB3D9"/><path d="M 162,96 l 2,-7 -4,0 z" fill="#FFB3D9"/>' +
+          '<path d="M 158,130 l 0,8 M 154,130 l -1,7 M 162,130 l 1,7" stroke="#FFD24D" stroke-width="1.4"/>' +
+          sparkle(150, 104, 3, 'rgba(255,255,255,.7)') +
         '</g>';
       default:
         return '';

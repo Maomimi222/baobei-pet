@@ -467,6 +467,11 @@ h1,h2,h3{ margin:0 0 10px; }
 .shop-item .si-tag.lock{ color:#fff; background:linear-gradient(135deg,var(--purple),var(--blue)); }
 .shop-item .si-tag.on{ color:#fff; background:linear-gradient(135deg,var(--pink),#ffb3d2); }
 .shop-avail{ font-weight:800; color:var(--purple); margin:10px 0 2px; }
+.shop-item{ position:relative; }
+.shop-banner{ background:linear-gradient(90deg,#FFF3D6,#FFE3EC); color:#B5712A; border:1px solid #F3C97A; border-radius:12px; padding:8px 12px; margin-bottom:6px; font-size:13px; font-weight:700; text-align:center; }
+.si-series{ position:absolute; top:5px; left:6px; font-size:10px; background:#FFE9B0; color:#B5712A; border-radius:8px; padding:1px 5px; font-weight:700; }
+.shop-item.expired{ opacity:.5; filter:grayscale(.3); }
+.shop-item.expired .si-tag.lock{ background:#BBB; }
 
 /* ===== 场景选择 ===== */
 .scene-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:10px; }

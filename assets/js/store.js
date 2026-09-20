@@ -339,12 +339,22 @@
     /* ---- 换装 ---- */
     _outfit(id) { return (window.PetArt && window.PetArt.OUTFIT_MAP) ? window.PetArt.OUTFIT_MAP[id] : null; },
     hasOutfit(id) { return this.activePet().wardrobe.includes(id); },
+    // 限定装扮是否在兑换期内（无 limitedUntil 视为常驻；否则以该日期 23:59:59 为截止）
+    outfitAvailable(o) {
+      if (!o) return false;
+      if (o.limitedUntil) {
+        const dl = new Date(o.limitedUntil + 'T23:59:59').getTime();
+        if (Date.now() >= dl) return false;
+      }
+      return true;
+    },
     // 花费星星购买并自动穿上（占用对应槽位）
     buyOutfit(id) {
       const o = this._outfit(id);
       if (!o) return { ok: false, msg: '没有这个装扮' };
       const pet = this.activePet();
       if (pet.wardrobe.includes(id)) return { ok: false, msg: '已经拥有啦' };
+      if (!this.outfitAvailable(o)) return { ok: false, msg: '「' + o.name + '」是中秋限定，10月1日后已下架' };
       const avail = this.availableStars();
       if (avail < o.cost) return { ok: false, msg: '星星不够（还差 ' + (o.cost - avail) + ' 颗）' };
       this.data.stars.spent += o.cost;
