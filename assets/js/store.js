@@ -95,7 +95,7 @@
         math: { correct: 0, mulSeen: [] },
         sudoku: { completed: 0 },
         challenge: { completed: 0, starsEarned: 0 },
-        selfcare: { date: '', done: [], counts: { eat: 0, wash: 0, tidy: 0, bath: 0, sleep: 0, wake: 0, bekind: 0, reading: 0, homework: 0, calm: 0, piano: 0, exercise: 0 }, stars: 0 },
+        selfcare: { date: '', done: [], counts: { eat: 0, wash: 0, tidy: 0, bath: 0, sleep: 0, wake: 0, bekind: 0, reading: 0, homework: 0, calm: 0, piano: 0, exercise: 0 }, stars: 0, wakeStreak: 0, wakeLastDate: '', wakeBonusTotal: 0 },
       },
     };
   }
@@ -469,6 +469,13 @@
         this.data.progress.selfcare.done = [];
       }
     },
+    _yesterday() {
+      const d = new Date();
+      d.setDate(d.getDate() - 1);
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return d.getFullYear() + '-' + m + '-' + day;
+    },
     selfcareIsDone(id) { this._ensureSelfcareDay(); return this.data.progress.selfcare.done.includes(id); },
     selfcareDoneToday() { this._ensureSelfcareDay(); return this.data.progress.selfcare.done.slice(); },
     checkinSelfcare(id, stars) {
@@ -479,7 +486,28 @@
       c[id] = (c[id] || 0) + 1;
       const got = this.addStars(stars, { uncapped: true }); // 自理打卡不计入每日答题上限，但计入累计
       this.data.progress.selfcare.stars += got;
-      return got; // false=已打卡；>0=实际获得星星（自理打卡不受上限影响）
+      // 按时起床：连续打卡奖励（每连续 5 天，第 5 天额外 +2⭐）
+      let bonus = 0, streak = 0;
+      if (id === 'wake') {
+        const sc = this.data.progress.selfcare;
+        const today = this._today();
+        if (sc.wakeLastDate === today) {
+          streak = sc.wakeStreak;              // 同日重复（理论上不会到这）
+        } else if (sc.wakeLastDate === this._yesterday()) {
+          streak = sc.wakeStreak + 1;          // 连续
+        } else {
+          streak = 1;                          // 中断或首次
+        }
+        sc.wakeStreak = streak;
+        sc.wakeLastDate = today;
+        if (streak > 0 && streak % 5 === 0) {
+          bonus = 2;
+          const bg = this.addStars(bonus, { uncapped: true });
+          this.data.progress.selfcare.stars += bg;
+          sc.wakeBonusTotal = (sc.wakeBonusTotal || 0) + bonus;
+        }
+      }
+      return { got, bonus, streak }; // false=已打卡；否则返回实际获得（基础）+ bonus（额外）+ streak（当前连续天数）
     },
 
     _push(path, val) {

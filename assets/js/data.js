@@ -938,7 +938,7 @@
 
   // ---------- 自理能手：打卡任务（含星星分值）----------
   const selfcareTasks = [
-    { id: 'wake',       name: '按时起床', stars: 1, e: '⏰' },
+    { id: 'wake',       name: '按时起床', stars: 2, e: '⏰' },
     { id: 'eat',        name: '好好吃饭', stars: 1, e: '🍚' },
     { id: 'wash',       name: '乖乖洗漱', stars: 1, e: '🪥' },
     { id: 'bekind',     name: '友善对猫', stars: 1, e: '🐾' },
@@ -955,7 +955,7 @@
   // ---------- 各任务星星分值（供家长后台展示）----------
   const REWARDS = [
     { cat: '自理能手', tasks: [
-      { name: '按时起床（每天一次）', stars: 1 },
+      { name: '按时起床（每天一次，连续5天第5天额外+2⭐）', stars: 2 },
       { name: '好好吃饭（每天一次）', stars: 1 },
       { name: '乖乖洗漱（每天一次）', stars: 1 },
       { name: '友善对猫（每天一次）', stars: 1 },

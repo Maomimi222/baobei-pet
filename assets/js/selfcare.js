@@ -24,6 +24,7 @@
     // 累计统计
     const sc = S.data.progress.selfcare;
     const book = [ stat('⭐ 累计自理星星', sc.stars) ];
+    if (sc.wakeStreak > 0) book.push(stat('🔥 连续按时起床', sc.wakeStreak + ' 天'));
     D.selfcareTasks.forEach(t => book.push(stat(t.e + ' ' + t.name, (sc.counts[t.id] || 0) + ' 次')));
     const statBox = U.el('div', { class: 'card', style: { marginTop: '20px' } }, [
       U.el('h3', { style: { color: '#B488F5' } }, '📈 我的自理小账本'),
@@ -42,23 +43,40 @@
 
   function taskCard(t) {
     const done = S.selfcareIsDone(t.id);
-    return U.el('div', { class: 'card', style: { textAlign: 'center', padding: '18px', display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'center', opacity: done ? 0.7 : 1 } }, [
+    const children = [
       U.el('div', { style: { fontSize: '52px' } }, t.e),
       U.el('div', { style: { fontSize: '20px', fontWeight: '800', color: 'var(--purple)' } }, t.name),
       U.el('div', { style: { fontSize: '18px', color: 'var(--ink-soft)' } }, '+' + t.stars + ' ⭐'),
-      U.el('button', { class: 'btn ' + (done ? 'btn-green' : 'btn-pink'), onclick: () => doCheck(t) }, done ? '✅ 今日已打卡' : '📝 打卡'),
-    ]);
+    ];
+    if (t.id === 'wake') {
+      const streak = S.data.progress.selfcare.wakeStreak || 0;
+      const left = streak > 0 ? (5 - (streak % 5)) % 5 : 5;
+      const hint = streak > 0
+        ? (left === 0 ? '🔥 今天额外 +2⭐ 到账！' : '🔥 连续 ' + streak + ' 天，再 ' + left + ' 天额外 +2⭐')
+        : '🔥 连续 5 天第 5 天额外 +2⭐';
+      children.push(U.el('div', { style: { fontSize: '12px', color: '#E0823B', fontWeight: '700' } }, hint));
+    }
+    children.push(U.el('button', { class: 'btn ' + (done ? 'btn-green' : 'btn-pink'), onclick: () => doCheck(t) }, done ? '✅ 今日已打卡' : '📝 打卡'));
+    return U.el('div', { class: 'card', style: { textAlign: 'center', padding: '18px', display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'center', opacity: done ? 0.7 : 1 } }, children);
   }
 
   function doCheck(t) {
-    const got = S.checkinSelfcare(t.id, t.stars);
-    if (got === false) {
+    const res = S.checkinSelfcare(t.id, t.stars);
+    if (res === false) {
       U.toast('今天已经完成啦，明天再来～', '🌙');
       return;
     }
     U.confetti(1200);
-    if (got > 0) U.toast(t.name + ' +' + got + '⭐', t.e);
-    else U.toast(t.name + ' 打卡成功！今天星星到上限 40 啦～', '🌟');
+    const got = res.got || 0;
+    if (got > 0) {
+      let msg = t.name + ' +' + got + '⭐';
+      if (t.id === 'wake' && res.bonus > 0) {
+        msg += '（连续 ' + res.streak + ' 天·额外 +' + res.bonus + '⭐）';
+      }
+      U.toast(msg, t.e);
+    } else {
+      U.toast(t.name + ' 打卡成功！今天星星到上限 40 啦～', '🌟');
+    }
     render(document.getElementById('view-selfcare'));
     window.App.refreshChrome();
   }
